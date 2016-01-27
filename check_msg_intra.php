@@ -1,7 +1,7 @@
 <?php
 
 //Get config from config file
-$configText = file_get_contents("./config.json");
+$configText = file_get_contents(__DIR__ . "/config.json");
 $configJson = json_decode($configText, true);
 
 //Construct login/password array
@@ -42,8 +42,8 @@ curl_close($ch);
 $json = array_reverse(json_decode($result, true));
 
 //get all message's id already parsed
-$myfile = fopen("./lastmsgID.txt", "r");
-$lastID = fread($myfile,filesize("./lastmsgID.txt"));
+$myfile = fopen(__DIR__ . "/lastmsgID.txt", "r");
+$lastID = fread($myfile,filesize(__DIR__ . "/lastmsgID.txt"));
 fclose($myfile);
 
 foreach ($json as $msg) {
@@ -62,7 +62,7 @@ foreach ($json as $msg) {
   //If the id is not in the id's file
   if (strpos($lastID, $msg["id"]) === false) {
     //add current id in file
-    $fp = fopen('./lastmsgID.txt', 'a');
+    $fp = fopen(__DIR__ . '/lastmsgID.txt', 'a');
     fwrite($fp, $msg["id"].PHP_EOL);
     fclose($fp);
 
