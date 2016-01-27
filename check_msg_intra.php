@@ -65,7 +65,6 @@ foreach ($json as $msg) {
     $fp = fopen('./lastmsgID.txt', 'a');
     fwrite($fp, $msg["id"].PHP_EOL);
     fclose($fp);
-    echo $msg["title"] . PHP_EOL;
 
     //prepare to send title title to Slack
     $fields = array();
