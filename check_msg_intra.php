@@ -51,7 +51,7 @@ foreach ($json as $msg) {
   preg_match_all('/<.*<\/a>/i', $msg['title'], $result);
 
   if (!empty($result)) {
-    //replace <a> by Slack complient syntaxe
+    //replace <a> by Slack compliant syntaxe
     try {
       $a = new SimpleXMLElement($result[0][0]);
       $msg['title'] = preg_replace('#<.*<\/a>#', "<https://intra.epitech.eu" . $a['href'] . "|" . $a[0] . ">", $msg['title']);
