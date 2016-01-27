@@ -1,0 +1,6 @@
+{
+  "message_url": "myUsername",
+  "password": "myPassword",
+  "message_url": "https://intra.epitech.eu/user/notification/message?format=json",
+  "slack_hook_url" : "https://hooks.slack.com/services/...."
+}
