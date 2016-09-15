@@ -1,0 +1,8 @@
+{
+  "login": "myUsername",
+  "password": "myPassword",
+  "linkAPI": "https://intra.epitech.eu/user/notification/message?format=json",
+  "slackHookUrl" : "https://hooks.slack.com/services/....",
+  "slackHookName" : "intranet-notification",
+  "checkInterval" : 300000
+}

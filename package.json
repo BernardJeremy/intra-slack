@@ -1,0 +1,24 @@
+{
+  "name": "intra-slack",
+  "version": "1.0.0",
+  "description": "NodeJS script allowing to send Epitech intranet's messages to Slack.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BernardJeremy/intra-slack.git"
+  },
+  "author": "BernardJeremy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BernardJeremy/intra-slack/issues"
+  },
+  "homepage": "https://github.com/BernardJeremy/intra-slack#readme",
+  "dependencies": {
+    "phantom": "^2.1.21",
+    "slack-node": "^0.2.0",
+    "slackify-html": "^1.0.1"
+  }
+}
