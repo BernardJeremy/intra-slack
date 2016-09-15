@@ -122,4 +122,4 @@ function main() {
   });
 }
 
-setInterval(main, checkInterval);
+main();
