@@ -21,4 +21,3 @@ Node.JS script allowing to send Epitech intranet's messages to Slack.
 - `linkAPI` : Link to the intranet API to retrieve all messages (You shouldn't have to change this).
 - `slackHookUrl` :  Link to your Slack incoming-webhooks.
 - `slackHookName` : Name to display when you will get notified on Slack.
-- `checkInterval` : Interval (in milliseconds) between each check.
