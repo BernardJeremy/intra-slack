@@ -29,7 +29,7 @@ function getContent(url) {
           return page.open(url, 'POST', postBody);
       })
       .then(status => {
-          return sitepage.property('content');
+          return sitepage.property('plainText');
       })
       .then(content => {
           fulfill(content);
@@ -57,14 +57,6 @@ function sendSlackMessage(text) {
     }
   });
 }
-
-//return a string between
-function stringBetween(target, begin, end) {
-  let startAt = (begin === '' ? 0 : target.indexOf(begin));
-  let endAt = (end === '' ? target.length : target.indexOf(end));
-
-  return target.substring(startAt, endAt + 1);
-};
 
 // return filename
 function getSaveFilename() {
@@ -94,28 +86,34 @@ function decodeHTMLEntities(text) {
     return text;
 }
 
+// iterate over every message and send new one to slack
+function messageNotifier(json) {
+  for (let i = 0; i < json.length; i++){
+    let msg = json[i];
+    let id = msg.id;
+
+    let savedData = {};
+    if (fs.existsSync(getSaveFilename())) {
+      savedData = JSON.parse(fs.readFileSync(getSaveFilename(), 'utf8'));
+    }
+
+    if (savedData.length == 0 || !(id in savedData)) {
+      let title = decodeHTMLEntities(msg.title);
+      title = title.split('href="').join('href="https://intra.epitech.eu');
+      title = slackify(title);
+      console.log(title);
+      //sendSlackMessage(title);
+      updateSavedData(savedData, id);
+    }
+  }
+}
+
 function main() {
   getContent(linkAPI).then(function(content) {
-    let extractedString = stringBetween(content, '[', ']');
-    let json = JSON.parse(extractedString);
+    let json = JSON.parse(content);
 
-    for (let i = 0; i < json.length; i++){
-      let msg = json[i];
-      let id = msg.id;
+    messageNotifier(json.history);
 
-      let savedData = {};
-      if (fs.existsSync(getSaveFilename())) {
-        savedData = JSON.parse(fs.readFileSync(getSaveFilename(), 'utf8'))
-      }
-
-      if (savedData.length == 0 || !(id in savedData)) {
-        let title = decodeHTMLEntities(msg.title);
-        title = title.split('href="').join('href="https://intra.epitech.eu');
-        title = slackify(title);
-        sendSlackMessage(title);
-        updateSavedData(savedData, id);
-      }
-    }
   }).catch(function(err) {
     console.log(err);
   });
