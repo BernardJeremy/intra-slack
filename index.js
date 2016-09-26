@@ -59,17 +59,17 @@ function sendSlackMessage(text) {
 }
 
 // return filename
-function getSaveFilename() {
-  return 'savedID.json'
+function getSaveFilename(type) {
+  return 'savedID_intra_' + type + '.json'
 }
 
 // Perform update of the save data file
-function updateSavedData(savedData, newID) {
+function updateSavedData(savedData, type, newID) {
   savedData[newID] = true;
-  if (fs.existsSync(getSaveFilename())) {
-    fs.unlinkSync(getSaveFilename());
+  if (fs.existsSync(getSaveFilename(type))) {
+    fs.unlinkSync(getSaveFilename(type));
   }
-  fs.writeFileSync(getSaveFilename(), JSON.stringify(savedData));
+  fs.writeFileSync(getSaveFilename(type), JSON.stringify(savedData));
 }
 
 function decodeHTMLEntities(text) {
@@ -86,24 +86,58 @@ function decodeHTMLEntities(text) {
     return text;
 }
 
-// iterate over every message and send new one to slack
-function messageNotifier(json) {
+function objIsEmpty(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+// return potential saved data from file
+function getSavedData(type) {
+  let savedData = {};
+  if (fs.existsSync(getSaveFilename(type))) {
+    savedData = JSON.parse(fs.readFileSync(getSaveFilename(type), 'utf8'));
+  }
+
+  return savedData;
+}
+
+// iterate over every messages and send new one to slack
+function messageNotifier(json, type) {
+  let savedData = getSavedData(type);
+  let initializing = objIsEmpty(savedData);
+
   for (let i = 0; i < json.length; i++){
     let msg = json[i];
     let id = msg.id;
 
-    let savedData = {};
-    if (fs.existsSync(getSaveFilename())) {
-      savedData = JSON.parse(fs.readFileSync(getSaveFilename(), 'utf8'));
-    }
-
-    if (savedData.length == 0 || !(id in savedData)) {
+    if (initializing || !(id in savedData)) {
       let title = decodeHTMLEntities(msg.title);
       title = title.split('href="').join('href="https://intra.epitech.eu');
       title = slackify(title);
-      console.log(title);
-      //sendSlackMessage(title);
-      updateSavedData(savedData, id);
+      if (initializing == false) {
+        sendSlackMessage(title);
+      }
+      updateSavedData(savedData, type, id);
+    }
+  }
+}
+
+// iterate over every modules and send new one to slack
+function moduleNotifier(json, type) {
+  let savedData = getSavedData(type);
+  let initializing = objIsEmpty(savedData);
+
+  for (let i = 0; i < json.length; i++){
+    let module = json[i];
+    let id = module.title_link;
+
+    if (initializing || !(id in savedData)) {
+      let title = "*New module available* : ";
+      title += "<" + "https://intra.epitech.eu" + decodeHTMLEntities(module.title_link);
+      title += "|" + decodeHTMLEntities(module.title) + ">";
+      if (initializing == false) {
+        sendSlackMessage(title);
+      }
+      updateSavedData(savedData, type, id);
     }
   }
 }
@@ -112,7 +146,8 @@ function main() {
   getContent(linkAPI).then(function(content) {
     let json = JSON.parse(content);
 
-    messageNotifier(json.history);
+    messageNotifier(json.history, "history");
+    moduleNotifier(json.board.modules, "modules");
 
   }).catch(function(err) {
     console.log(err);
