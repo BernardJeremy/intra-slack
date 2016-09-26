@@ -11,7 +11,6 @@ const password = require('./config.json').password;
 const linkAPI = require('./config.json').linkAPI;
 const slackUrl = require('./config.json').slackHookUrl;
 const slackName = require('./config.json').slackHookName;
-const checkInterval = require('./config.json').checkInterval;
 
 // Retrieve message from intra API
 function getContent(url) {
