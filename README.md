@@ -9,7 +9,7 @@ Node.JS script allowing to send Epitech intranet's messages to Slack.
 
 ## Installation
 - Simply clone this depot anywhere on your server.
-- Copy [config.json.exemple](https://github.com/BernardJeremy/intra-slack/blob/master/config.json.exemple) file into a `config.json` file.
+- Copy [config.json.exemple](https://github.com/BernardJeremy/intra-slack/blob/master/config.json.example) file into a `config.json` file.
 - Add your intranet login/password to the `config.json` file.
 - Install a [incoming-webhooks](https://api.slack.com/incoming-webhooks) on your Slack.
 - Add your link of the Slack incoming-webhooks in the `config.json` file.
