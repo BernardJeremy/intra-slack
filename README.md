@@ -4,7 +4,7 @@ Node.JS script allowing to send Epitech intranet's messages to Slack.
 
 ## Features
 - Retrieves messages from Epitech's intranet
-- Send the title of any new messages to a configured Slack hook
+- Send the title, content and date of any new messages to a configured Slack hook
 - Replace potential HTML link by a Slack compliant version
 
 ## Installation

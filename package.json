@@ -1,6 +1,6 @@
 {
   "name": "intra-slack",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "NodeJS script allowing to send Epitech intranet's messages to Slack.",
   "main": "index.js",
   "scripts": {

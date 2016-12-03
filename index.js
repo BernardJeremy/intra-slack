@@ -7,15 +7,29 @@ const slackify = require('slackify-html');
 var config = require('./config.json');
 
 // Send the slack message to the config's webhook
-function sendSlackMessage(text) {
+function sendSlackMessage(text, content, date) {
 	var msgParameters = {
-		username: config.slackName,
+		username: config.slackHookName,
 		text: text,
 	};
+	if (content !== null && date !== null) {
+		msgParameters.attachments = [
+			{
+				color: "#015a9f",
+				fields:[
+					{
+						title:date,
+						value:content,
+						short:false
+					}
+				]
+			}
+		]
+	}
 	var slack = new Slack();
 	slack.setWebhook(config.slackHookUrl);
 	slack.webhook(msgParameters, function (err, response) {
-		if (response.statusCode != 200) {
+		if (response.statusCode !== 200) {
 			console.log(err, response);
 		}
 	});
@@ -49,10 +63,6 @@ function decodeHTMLEntities(text) {
 	return text;
 }
 
-function objIsEmpty(obj) {
-	return Object.keys(obj).length === 0 && obj.constructor === Object;
-}
-
 // return potential saved data from file
 function getSavedData(type) {
 	var savedData = {};
@@ -75,7 +85,9 @@ function messageNotifier(json, type) {
 			var title = decodeHTMLEntities(msg.title);
 			title = title.split('href="').join('href="https://intra.epitech.eu');
 			title = slackify(title);
-			sendSlackMessage(title);
+			var content = slackify(msg.content);
+			var date = slackify(msg.date);
+			sendSlackMessage(title, content, date);
 			updateSavedData(savedData, type, id);
 		}
 	}
@@ -93,7 +105,7 @@ function moduleNotifier(json, type) {
 			var title = "*New module available* : ";
 			title += "<" + "https://intra.epitech.eu" + decodeHTMLEntities(module.title_link);
 			title += "|" + decodeHTMLEntities(module.title) + ">";
-			sendSlackMessage(title);
+			sendSlackMessage(title, null, null);
 			updateSavedData(savedData, type, id);
 		}
 	}
