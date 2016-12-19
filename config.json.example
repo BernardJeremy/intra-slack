@@ -1,7 +1,8 @@
 {
-  "login": "myUsername",
-  "password": "myPassword",
-  "linkAPI": "https://intra.epitech.eu/?format=json",
-  "slackHookUrl" : "https://hooks.slack.com/services/....",
-  "slackHookName" : "intranet-notification"
+	"login": "myUsername",
+	"password": "myPassword",
+	"hostname": "intra.epitech.eu",
+	"path": "/?format=json",
+	"slackHookUrl" : "https://hooks.slack.com/services/....",
+	"slackHookName" : "intranet-notification"
 }
