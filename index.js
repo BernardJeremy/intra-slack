@@ -88,7 +88,8 @@ function messageNotifier(json, type) {
       let title = decodeHTMLEntities(msg.title);
       title = title.split('href="').join('href="https://intra.epitech.eu');
       title = slackify(title);
-      const content = slackify(msg.content);
+      let content = msg.content.split('href="').join('href="https://intra.epitech.eu');
+      content = slackify(content);
       const date = slackify(msg.date);
       sendSlackMessage(title, content, date);
       updateSavedData(savedData, type, id);
